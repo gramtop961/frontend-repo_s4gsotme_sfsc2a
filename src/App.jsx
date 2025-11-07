@@ -2,7 +2,7 @@ import Hero from "./components/Hero";
 import BikeGrid from "./components/BikeGrid";
 import BookingForm from "./components/BookingForm";
 import FAQ from "./components/FAQ";
-import { Bicycle, Phone, MapPin, Facebook, Instagram } from "lucide-react";
+import { Bike, Phone, MapPin, Facebook, Instagram } from "lucide-react";
 
 export default function App() {
   return (
@@ -10,7 +10,7 @@ export default function App() {
       <header className="sticky top-0 z-50 border-b bg-white/80 backdrop-blur">
         <div className="mx-auto flex max-w-7xl items-center justify-between px-6 py-3">
           <a href="#" className="flex items-center gap-2 font-semibold">
-            <Bicycle className="text-emerald-600" />
+            <Bike className="text-emerald-600" />
             <span>VeloRent</span>
           </a>
           <nav className="hidden items-center gap-6 text-sm md:flex">
@@ -33,7 +33,7 @@ export default function App() {
         <div className="mx-auto max-w-7xl px-6 py-10">
           <div className="grid gap-8 sm:grid-cols-2 md:grid-cols-4">
             <div>
-              <div className="flex items-center gap-2 font-semibold"><Bicycle className="text-emerald-600" /><span>VeloRent</span></div>
+              <div className="flex items-center gap-2 font-semibold"><Bike className="text-emerald-600" /><span>VeloRent</span></div>
               <p className="mt-2 text-sm text-muted-foreground">Explore the city on two wheels. Affordable rentals, flexible schedules, and friendly support.</p>
             </div>
             <div>
