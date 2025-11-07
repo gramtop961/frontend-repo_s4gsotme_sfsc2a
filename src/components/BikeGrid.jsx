@@ -1,6 +1,7 @@
-import { Star } from "lucide-react";
+import { useMemo, useState } from "react";
+import { Star, Filter } from "lucide-react";
 
-const bikes = [
+const ALL_BIKES = [
   {
     id: 1,
     name: "City Cruiser",
@@ -39,26 +40,68 @@ const bikes = [
   },
 ];
 
+const TYPES = ["All", "Hybrid", "Mountain", "Road", "Cargo"];
+
 export default function BikeGrid() {
+  const [type, setType] = useState("All");
+  const [mode, setMode] = useState("hour"); // hour | day
+
+  const bikes = useMemo(() => {
+    return type === "All" ? ALL_BIKES : ALL_BIKES.filter((b) => b.type === type);
+  }, [type]);
+
+  function displayPrice(hourly) {
+    if (mode === "hour") return `$${hourly} / hour`;
+    const daily = Math.round(hourly * 6); // simple day discount
+    return `$${daily} / day`;
+  }
+
   return (
     <section id="bikes" className="mx-auto max-w-7xl px-6 py-16">
-      <div className="mb-8 flex items-end justify-between">
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
         <div>
           <h2 className="text-3xl font-bold tracking-tight sm:text-4xl">Popular bikes</h2>
-          <p className="mt-2 text-muted-foreground">
-            Well-maintained, safety-checked after every ride.
-          </p>
+          <p className="mt-2 text-muted-foreground">Well-maintained, safety-checked after every ride.</p>
         </div>
-        <a href="#book" className="rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700">
-          Reserve now
-        </a>
+        <div className="flex flex-wrap items-center gap-2">
+          <div className="flex items-center gap-2 rounded-md border bg-white p-1 text-sm">
+            {TYPES.map((t) => (
+              <button
+                key={t}
+                onClick={() => setType(t)}
+                className={`rounded px-2.5 py-1.5 ${type === t ? "bg-emerald-600 text-white" : "hover:bg-gray-50"}`}
+              >
+                {t}
+              </button>
+            ))}
+          </div>
+          <div className="flex items-center gap-1 rounded-md border bg-white p-1 text-sm">
+            <button
+              onClick={() => setMode("hour")}
+              className={`rounded px-2.5 py-1.5 ${mode === "hour" ? "bg-gray-900 text-white" : "hover:bg-gray-50"}`}
+            >
+              Hourly
+            </button>
+            <button
+              onClick={() => setMode("day")}
+              className={`rounded px-2.5 py-1.5 ${mode === "day" ? "bg-gray-900 text-white" : "hover:bg-gray-50"}`}
+            >
+              Daily
+            </button>
+          </div>
+          <a href="#book" className="ml-auto rounded-md bg-emerald-600 px-4 py-2 text-white hover:bg-emerald-700">
+            Reserve now
+          </a>
+        </div>
       </div>
+      <div className="mb-4 flex items-center gap-2 text-sm text-muted-foreground"><Filter size={16}/> Filter by type and switch pricing to compare deals.</div>
       <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {bikes.map((bike) => (
           <article key={bike.id} className="group overflow-hidden rounded-xl border bg-white shadow-sm transition hover:shadow-md">
             <div className="relative">
               <img src={bike.image} alt={bike.name} className="aspect-[4/3] w-full object-cover" loading="lazy" />
               <div className="absolute inset-0 bg-gradient-to-t from-black/40 to-transparent opacity-0 transition group-hover:opacity-100" />
+              <span className="absolute left-2 top-2 rounded bg-white/90 px-2 py-0.5 text-xs font-medium text-emerald-700">Available today</span>
             </div>
             <div className="p-4">
               <div className="flex items-start justify-between gap-3">
@@ -72,9 +115,15 @@ export default function BikeGrid() {
                 </div>
               </div>
               <div className="mt-4 flex items-center justify-between">
-                <p className="text-lg font-semibold">${bike.price} <span className="text-sm font-normal text-muted-foreground">/ hour</span></p>
+                <p className="text-lg font-semibold">{displayPrice(bike.price)}</p>
                 <a href="#book" className="rounded-md border px-3 py-1.5 text-sm hover:bg-gray-50">Rent</a>
               </div>
+              <ul className="mt-3 grid grid-cols-2 gap-2 text-xs text-muted-foreground">
+                <li className="rounded-md bg-gray-50 px-2 py-1">Free helmet</li>
+                <li className="rounded-md bg-gray-50 px-2 py-1">U-lock included</li>
+                <li className="rounded-md bg-gray-50 px-2 py-1">Maintenance checked</li>
+                <li className="rounded-md bg-gray-50 px-2 py-1">Roadside support</li>
+              </ul>
             </div>
           </article>
         ))}
